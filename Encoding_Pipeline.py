@@ -73,6 +73,14 @@ def get_single_encoder(encoder_name: str, cat_cols: list):
     return encoder
 
 def process_cols(data):
+    """
+    The function "process_cols" separates the categorical and numerical columns from a given dataset and
+    returns them as separate dataframes.
+    
+    :param data: The "data" parameter is a pandas DataFrame that contains the dataset you want to
+    process
+    :return: two dataframes: categorical_data and numerical_data.
+    """
     
     categorical_columns = data.select_dtypes(include=['object', 'category']).columns
     categorical_data = data.loc[:, categorical_columns]
@@ -87,6 +95,19 @@ def process_cols(data):
 
 
 def remove_high_missing_columns(data, threshold=0.6):
+    """
+    The function removes columns from a given dataset that have a high percentage of missing values,
+    based on a specified threshold.
+    
+    :param data: The "data" parameter is the input dataframe that contains the columns with missing
+    values
+    :param threshold: The threshold parameter is used to determine the maximum percentage of missing
+    values allowed in a column. Any column with a missing percentage greater than the threshold will be
+    dropped from the dataset. The default value for the threshold is 0.6, meaning that any column with
+    more than 60% missing values will
+    :return: the filtered data, which is a subset of the original data containing only the columns that
+    have a missing percentage less than or equal to the threshold.
+    """
     # Calculate the percentage of missing values for each column
     missing_percentage = data.isnull().mean()
 
@@ -128,6 +149,14 @@ def identify_nominal_ordinal(categorical_data, target_variable):
     return categorical_info
 
 def is_interval_categorical_ordinal(data_column):
+    """
+    The function determines whether a given data column is interval categorical ordinal by checking if
+    the differences between consecutive category mappings are the same.
+    
+    :param data_column: The data_column parameter is a pandas Series object that represents a column of
+    categorical data
+    :return: a boolean value indicating whether the data column is interval categorical ordinal or not.
+    """
     unique_categories = data_column.unique()
     
     # Convert the categories to integers, keeping the order
@@ -143,6 +172,19 @@ def is_interval_categorical_ordinal(data_column):
     return is_interval
 
 def columns_with_low_cardinality(data, threshold=15):
+    """
+    The function `columns_with_low_cardinality` takes in a dataframe and a threshold value, and returns
+    a list of columns with low cardinality (number of unique values below the threshold) and a list of
+    columns with high cardinality.
+    
+    :param data: The `data` parameter is the input dataframe that contains the columns for which we want
+    to determine the cardinality
+    :param threshold: The threshold parameter is used to determine the maximum number of unique values
+    allowed in a column for it to be considered as having low cardinality. If the number of unique
+    values in a column is less than the threshold, it is classified as having low cardinality.
+    Otherwise, it is classified as having high, defaults to 15 (optional)
+    :return: two lists: low_cardinality_columns and high_cardinality_columns.
+    """
     low_cardinality_columns = []
     high_cardinality_columns = []
 
@@ -157,6 +199,19 @@ def columns_with_low_cardinality(data, threshold=15):
 
 
 def estimate_sparse_matrix_memory_usage(columns, sample_data):
+    """
+    The function `estimate_sparse_matrix_memory_usage` calculates the memory usage of a sparse matrix
+    given the column names and a sample data.
+    
+    :param columns: The "columns" parameter is a list of column names in a sparse matrix. These column
+    names represent the columns in the sample_data matrix
+    :param sample_data: The `sample_data` parameter is a pandas DataFrame that represents a sparse
+    matrix. It contains the data for each row and column, where the non-zero elements are represented by
+    their actual values and the zero elements are represented by NaN or any other missing value
+    indicator
+    :return: The function `estimate_sparse_matrix_memory_usage` returns the total memory usage in
+    megabytes.
+    """
     memory_usages_mb = {}
     total_memory = 0
 
@@ -227,7 +282,10 @@ def estimate_sparse_matrix_memory_usage(columns, sample_data):
 
 if __name__ == "__main__":
     merge_list = []
-    data = pd.read_csv("C:/CODE/JIO (JPL)/Feature_Encoding_Pipeline_AUTOML/data/adult.csv",sep=",")
+
+    #ENTER THE DATA FILE AND SEPERATOR
+    data = pd.read_csv("/data/adult.csv",sep=",")
+
     print("\nData => \n",data.head())
     print("\nColumn List : \n",data.columns.tolist())
 
